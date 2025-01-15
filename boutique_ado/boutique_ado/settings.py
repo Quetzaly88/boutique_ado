@@ -28,6 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['8000-quetzaly88-boutiqueado-nwuej2y4agg.ws.codeinstitute-ide.net']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://8000-quetzaly88-boutiqueado-nwuej2y4agg.ws.codeinstitute-ide.net'
+]
 
 # Application definition
 
@@ -52,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',  # add. AccountMiddleware is part of django-allauth and is necessary for handling certain account-related functionality, such as login state and redirects.
 ]
 
 ROOT_URLCONF = 'boutique_ado.urls'
@@ -64,13 +68,25 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
+                'django.template.context_processors.request', #required by allauth
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
+
+# from allauth documentation
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+
 
 WSGI_APPLICATION = 'boutique_ado.wsgi.application'
 
