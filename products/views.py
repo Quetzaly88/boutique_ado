@@ -9,6 +9,7 @@ def all_products(request):
     """
 
     products = Product.objects.all()
+    query = None
 
     if request.GET:
         if 'q' in request.GET:
@@ -17,8 +18,12 @@ def all_products(request):
                 messages.error(request, "You didn't enter any search criteria")
                 return redirect(reverse('products'))
 
+            queries = Q(name__icontains=query) | Q(description__incontains=query)
+            products = products.filter(queries)
+
     context = {
         'products': products,
+        'search_term': query,
     }
 
     return render(request, 'products/products.html', context)
